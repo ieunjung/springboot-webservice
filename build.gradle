@@ -1,0 +1,53 @@
+buildscript {
+	ext {
+		springBootVersion = '2.1.6.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath "io.spring.gradle:dependency-management-plugin:1.0.4.RELEASE" 
+	}
+}
+
+plugins {
+	id 'org.springframework.boot' version '2.2.4.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+	id 'java'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+	mavenCentral()
+}
+
+//Spring Boot Overriding
+ext['hibernate.version'] = '5.2.11.Final'
+
+dependencies {
+	// web application dependency
+	compile('org.springframework.boot:spring-boot-starter-web'){
+		exclude group: "org.springframework.boot", module: "spring-boot-starter-tomcat"
+	}
+	compile("org.springframework.boot:spring-boot-starter-undertow")    // for undertow Server
+	compile 'pl.allegro.tech.boot:handlebars-spring-boot-starter:0.3.0'	// handlebars for Views
+	compile('org.springframework.boot:spring-boot-starter-data-jpa')
+	runtime('com.h2database:h2')
+	runtime('org.springframework.boot:spring-boot-devtools')
+	compileOnly('org.projectlombok:lombok')
+	annotationProcessor("org.projectlombok:lombok")
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+configurations {
+    // exclude Tomcat
+    compile.exclude module: 'spring-boot-starter-tomcat'
+}
+
+test {
+	useJUnitPlatform()
+}
